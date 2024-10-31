@@ -1,3 +1,3 @@
 start_strings = {
-    "welcome_string": "Добро пожаловать!"
+    "start_blank": "Введите <b>название компании</b>"
 }
