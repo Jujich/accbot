@@ -30,4 +30,4 @@ WORKDIR /app
 COPY . .
 
 # Команда для запуска приложения
-CMD ["python", "your_main_file.py"]
+CMD ["python", "main.py"]
