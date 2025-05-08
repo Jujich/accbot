@@ -54,6 +54,6 @@ jobs:
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            docker stop myapp || true
-            docker rm myapp || true
-            docker run -d --name myapp -p 4000:4000 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            docker stop accbot || true
+            docker rm accbot || true
+            docker run -d --env-file config.env --name accbot -p 4000:4000 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
