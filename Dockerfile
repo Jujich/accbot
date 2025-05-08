@@ -1,33 +1,39 @@
-# Используем официальный образ Python
 FROM python:3.11-slim as builder
 
-# Устанавливаем зависимости системы
+# Установка системных зависимостей
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc python3-dev
+    apt-get install -y --no-install-recommends \
+    gcc \
+    python3-dev \
+    libpq-dev \
+    libssl-dev \
+    libffi-dev \
+    build-essential
 
-# Создаем виртуальное окружение
+# Создание и активация виртуального окружения
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Устанавливаем зависимости
+# Установка зависимостей с кэшированием
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Финальный образ
 FROM python:3.11-slim
 
-# Копируем виртуальное окружение из builder
-COPY --from=builder /opt/venv /opt/venv
+# Установка runtime зависимостей
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libpq5 \
+    openssl && \
+    rm -rf /var/lib/apt/lists/*
 
-# Устанавливаем переменные окружения
+COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
 
-# Создаем и переходим в рабочую директорию
 WORKDIR /app
-
-# Копируем исходный код
 COPY . .
 
-# Команда для запуска приложения
-CMD ["python", "main.py"]
+CMD ["python", "your_main_file.py"]
