@@ -56,4 +56,8 @@ jobs:
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             docker stop accbot || true
             docker rm accbot || true
-            docker run -d --env-file config.env --name accbot -p 4000:4000 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            docker run -d \
+            -e "CLIENT_TOKEN=${{ secrets.CLIENT_TOKEN }}" \
+            -e "ACCOUNTANT_TOKEN=${{ secrets.ACCOUNTANT_TOKEN }}" \
+            --name accbot \
+            -p 4000:4000 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest

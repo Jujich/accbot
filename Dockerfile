@@ -34,9 +34,8 @@ RUN apt-get update && \
 
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
-ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 COPY . .
 
-CMD ["python", "your_main_file.py"]
+CMD ["python", "main.py"]
